@@ -8,45 +8,48 @@ export const revalidate = 60;
 
 export default async function Home() {
   const appConfig = await getAppConfig();
-
+  const featuredArticle = appConfig.landingPageArticles.heroPost;
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
         <section className="border-b">
           <div className="container mx-auto px-4">
             {/*FEATURED ARTICLE*/}
-            <div className="grid gap-6 py-8 md:grid-cols-2">
-              <div className="flex flex-col justify-center space-y-4">
-                <Link
-                  href={`/${appConfig.landingPageArticles.heroPost.slug}`}
-                  className="group"
-                >
-                  <h2 className="text-2xl leading-tight font-bold group-hover:text-blue-700 md:text-3xl">
-                    {appConfig.landingPageArticles.heroPost.title}
-                  </h2>
-                </Link>
-                <p className="text-gray-700">
-                  {appConfig.landingPageArticles.heroPost.description}
-                </p>
+            {!!featuredArticle && (
+              <div className="grid gap-6 py-8 md:grid-cols-2">
+                <div className="flex flex-col justify-center space-y-4">
+                  <Link
+                    href={`/${appConfig.landingPageArticles.heroPost.slug}`}
+                    className="group"
+                  >
+                    <h2 className="text-2xl leading-tight font-bold group-hover:text-blue-700 md:text-3xl">
+                      {appConfig.landingPageArticles.heroPost.title}
+                    </h2>
+                  </Link>
+                  <p className="text-gray-700">
+                    {appConfig.landingPageArticles.heroPost.description}
+                  </p>
+                </div>
+                <div className="relative h-64 md:h-full">
+                  <Image
+                    // src={appConfig.landingPageArticles.heroPost.cover.url}
+                    // alt={appConfig.landingPageArticles.heroPost.cover.alt}
+                    src={
+                      (appConfig.landingPageArticles.heroPost.cover as Media)
+                        .url ?? ""
+                    }
+                    alt={
+                      (appConfig.landingPageArticles.heroPost.cover as Media)
+                        .alt
+                    }
+                    fill
+                    className="rounded-md object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority
+                  />
+                </div>
               </div>
-              <div className="relative h-64 md:h-full">
-                <Image
-                  // src={appConfig.landingPageArticles.heroPost.cover.url}
-                  // alt={appConfig.landingPageArticles.heroPost.cover.alt}
-                  src={
-                    (appConfig.landingPageArticles.heroPost.cover as Media)
-                      .url ?? ""
-                  }
-                  alt={
-                    (appConfig.landingPageArticles.heroPost.cover as Media).alt
-                  }
-                  fill
-                  className="rounded-md object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
-              </div>
-            </div>
+            )}
           </div>
         </section>
 
