@@ -25,8 +25,6 @@ const getQueryClient = cache(createQueryClient);
 const caller = createCaller(createContext);
 
 export const { trpc: api, HydrateClient } = createHydrationHelpers<AppRouter>(
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-    caller,
-  getQueryClient
+  caller,
+  getQueryClient,
 );

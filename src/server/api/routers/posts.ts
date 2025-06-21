@@ -63,5 +63,7 @@ export const postRouter = createTRPCRouter({
         authorId: z.string(),
       }),
     )
-    .mutation(async ({ input }) => {}),
+    .mutation(async ({ input }) => {
+      return input;
+    }),
 });
