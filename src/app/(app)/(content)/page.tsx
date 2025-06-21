@@ -8,7 +8,8 @@ export const revalidate = 60;
 
 export default async function Home() {
   const appConfig = await getAppConfig();
-  const featuredArticle = appConfig.landingPageArticles.heroPost;
+  const featuredArticle = appConfig?.landingPageArticles?.heroPost;
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
