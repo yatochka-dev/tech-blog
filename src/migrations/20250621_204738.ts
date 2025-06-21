@@ -1,11 +1,19 @@
-import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import {
+  type MigrateUpArgs,
+  type MigrateDownArgs,
+  sql,
+} from "@payloadcms/db-postgres";
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   ALTER TABLE "appconf" ADD COLUMN "home_page_active" boolean DEFAULT false;`)
+   ALTER TABLE "appconf" ADD COLUMN "home_page_active" boolean DEFAULT false;`);
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({
+  db,
+  payload,
+  req,
+}: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-   ALTER TABLE "appconf" DROP COLUMN IF EXISTS "home_page_active";`)
+   ALTER TABLE "appconf" DROP COLUMN IF EXISTS "home_page_active";`);
 }
