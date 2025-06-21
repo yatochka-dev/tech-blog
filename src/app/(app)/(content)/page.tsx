@@ -56,7 +56,7 @@ export default async function Home() {
         <section className="py-8">
           <div className="container mx-auto px-4">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {appConfig.landingPageArticles.latestArticles.map((p) => (
+              {(appConfig.landingPageArticles.latestArticles ?? []).map((p) => (
                 <PostCard key={p.id} post={p} />
               ))}
 
@@ -96,16 +96,23 @@ export default async function Home() {
               <div className="space-y-6 md:col-span-2">
                 <h2 className="text-2xl font-bold">Latest Research</h2>
                 <div className="grid gap-6 sm:grid-cols-3">
-                  {appConfig.landingPageArticles.researchArticles.map((p) => {
-                    // no older than a week
-                    const isNew =
-                      new Date(p.createdAt) >
-                      new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                  {(appConfig.landingPageArticles.researchArticles ?? []).map(
+                    (p) => {
+                      // no older than a week
+                      const isNew =
+                        new Date(p.createdAt) >
+                        new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
-                    return (
-                      <PostCard key={p.id} post={p} isResearch isNew={isNew} />
-                    );
-                  })}
+                      return (
+                        <PostCard
+                          key={p.id}
+                          post={p}
+                          isResearch
+                          isNew={isNew}
+                        />
+                      );
+                    },
+                  )}
                 </div>
               </div>
             </div>
