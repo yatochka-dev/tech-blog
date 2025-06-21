@@ -27,7 +27,9 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@payload-config": ["./payload.config.ts"],
+      "@payload-types": ["./payload-types.ts"]
     }
   },
   "include": [

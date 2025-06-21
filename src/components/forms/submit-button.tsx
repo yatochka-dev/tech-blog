@@ -124,7 +124,7 @@ export function SubmitButton({
   // Determine button variant based on state
   const buttonVariant =
     buttonState === "success"
-      ? "success"
+      ? "default"
       : buttonState === "error"
         ? "destructive"
         : (variant ?? "default");

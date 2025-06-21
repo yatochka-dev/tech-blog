@@ -3,15 +3,14 @@
  * for Docker builds.
  */
 import "./src/env.js";
+import { withPayload } from "@payloadcms/next/withPayload";
 
 /** @type {import("next").NextConfig} */
 const config = {
-    images: {
-        remotePatterns: [
-            new URL("https://placehold.co/**")
-        ],
-        unoptimized: true
-    }
+  images: {
+    remotePatterns: [new URL("https://placehold.co/**")],
+    unoptimized: true,
+  },
 };
 
-export default config;
+export default withPayload(config);
