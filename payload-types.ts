@@ -442,6 +442,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Appconf {
   id: number;
   appName: string;
+  homePageActive?: boolean | null;
   landingPageArticles: {
     heroPost: number | Post;
     featuredPosts?: (number | Post)[] | null;
@@ -476,6 +477,7 @@ export interface Appconf {
  */
 export interface AppconfSelect<T extends boolean = true> {
   appName?: T;
+  homePageActive?: T;
   landingPageArticles?:
     | T
     | {

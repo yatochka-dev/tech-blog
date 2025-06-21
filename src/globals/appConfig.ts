@@ -32,7 +32,12 @@ export const AppConfig: GlobalConfig = {
               defaultValue: "Acme Corporation",
               type: "text",
             },
-
+            {
+              name: "homePageActive",
+              label: "Home Page Active",
+              type: "checkbox",
+              defaultValue: false,
+            },
             {
               name: "landingPageArticles",
               label: "Landing Page Articles",

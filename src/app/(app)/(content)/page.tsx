@@ -25,6 +25,8 @@ export default async function Home() {
     );
   }
 
+  if (appConfig.homePageActive !== true) return null;
+
   // B. SAFELY access nested data
   const heroPost = appConfig?.landingPageArticles?.heroPost;
   const latestArticles = appConfig?.landingPageArticles?.latestArticles ?? [];
@@ -33,7 +35,7 @@ export default async function Home() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <main className="flex-1">
+      <div className="flex-1">
         <section className="border-b">
           <div className="container mx-auto px-4">
             {/* C. Check for the specific data you need before rendering */}
@@ -97,7 +99,7 @@ export default async function Home() {
             </div>
           </div>
         </section>
-      </main>
+      </div>
     </div>
   );
 }
