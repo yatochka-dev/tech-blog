@@ -4,8 +4,6 @@ import { getAppConfig } from "~/data-access/appconf";
 import PostCard from "~/components/PostCard";
 import type { Media } from "@payload-types";
 
-export const revalidate = 60;
-
 export default async function Home() {
   const appConfig = await getAppConfig();
 
