@@ -16,12 +16,6 @@ import seoToMetadata from "~/lib/seo-to-metadata";
 //   icons: [{ rel: "icon", url: "/favicon.ico" }],
 // };
 
-const font = Architects_Daughter({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
-  weight: ["400"],
-});
-
 export async function generateMetadata(): Promise<Metadata> {
   const appConfig = await getAppConfig();
   const seo = appConfig.seo || {};
@@ -39,15 +33,13 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const appConfig = await getAppConfig();
   return (
-    <html lang="en" className={`${font.variable}`} suppressHydrationWarning>
-      <body className={"flex min-h-screen flex-col"}>
-        <Header appConfig={appConfig} />
+    <>
+      <Header appConfig={appConfig} />
 
-        <main className={"flex-1"}>
-          <Providers>{children}</Providers>
-        </main>
-        <Footer />
-      </body>
-    </html>
+      <main className={"flex-1"}>
+        <Providers>{children}</Providers>
+      </main>
+      <Footer />
+    </>
   );
 }
