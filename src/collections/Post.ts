@@ -1,6 +1,6 @@
 import type { CollectionConfig } from "payload";
 import slugify from "slugify";
-import { SeoField } from "~/app/fields/seo";
+import { SeoField } from "~/fields/seo";
 
 export const Posts: CollectionConfig = {
   slug: "posts",

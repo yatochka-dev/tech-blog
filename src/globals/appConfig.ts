@@ -1,7 +1,7 @@
 import type { GlobalConfig } from "payload";
 import all from "~/access/all";
 import admin from "~/access/admin";
-import { SeoField } from "~/app/fields/seo";
+import { SeoField } from "~/fields/seo";
 
 const MAX_LATEST_ARTICLES = 4;
 const MAX_RESEARCH_ARTICLES = 6;
