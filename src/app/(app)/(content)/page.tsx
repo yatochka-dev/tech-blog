@@ -7,6 +7,7 @@ import type { Media } from "@payload-types";
 function get() {
   return null;
 }
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   // const appConfig = await getAppConfig();
