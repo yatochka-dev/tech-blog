@@ -4,7 +4,7 @@ import { getAppConfig } from "~/data-access/appconf";
 import PostCard from "~/components/PostCard";
 import type { Media } from "@payload-types";
 
-function get(): any {
+function get() {
   return null;
 }
 
