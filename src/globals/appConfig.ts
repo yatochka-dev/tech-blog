@@ -100,7 +100,7 @@ export const AppConfig: GlobalConfig = {
             {
               name: "favicon",
               label:
-                "Favicon - There's no check on image size or type, so make sure it's small and of image/ico",
+                "Favicon - There's no check on image size or type, so make sure it's small and of the correct type",
               required: true,
               type: "relationship",
               relationTo: "media",

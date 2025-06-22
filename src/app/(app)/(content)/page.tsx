@@ -5,8 +5,8 @@ import PostCard from "~/components/PostCard";
 import type { Media } from "@payload-types";
 
 export default async function Home() {
-  const appConfig = await getAppConfig();
-
+  // const appConfig = await getAppConfig();
+  const appConfig = null;
   // DEBUGGING: Log the config received in the build environment
   console.log(
     "App config received during build:",
