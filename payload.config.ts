@@ -10,6 +10,7 @@ import { Posts } from "~/collections/Post";
 import { editor } from "./editor";
 import { Comment } from "~/collections/Comment";
 import { PostTag } from "~/collections/PostTag";
+import { resendAdapter } from "@payloadcms/email-resend";
 
 const r2 = s3Storage({
   collections: {
@@ -28,6 +29,11 @@ const r2 = s3Storage({
 
 export default buildConfig({
   // If you'd like to use Rich Text, pass your editor here
+  email: resendAdapter({
+    apiKey: env.RESEND_API_KEY,
+    defaultFromAddress: "noreply@tech-blog.yatochka.dev",
+    defaultFromName: "Tech Blog",
+  }),
   editor: editor,
   plugins: [r2],
   admin: {

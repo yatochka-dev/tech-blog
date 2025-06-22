@@ -18,6 +18,8 @@ export const env = createEnv({
     R2_SECRET_ACCESS_KEY: z.string(),
     R2_BUCKET: z.string(),
 
+    RESEND_API_KEY: z.string(),
+
     SUDO_USERS: z.string().transform((v) => {
       const dt = JSON.parse(v);
       return z.string().email().array().parse(dt);
@@ -46,6 +48,7 @@ export const env = createEnv({
     R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
     R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
     R2_BUCKET: process.env.R2_BUCKET,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
