@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import slugify from "slugify";
 import { SeoField } from "~/fields/seo";
+import { revalidateHomePage } from "~/data-access/appconf";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
@@ -16,6 +17,8 @@ export const Posts: CollectionConfig = {
         return data;
       },
     ],
+    afterChange: [revalidateHomePage],
+    afterDelete: [revalidateHomePage],
   },
   fields: [
     {

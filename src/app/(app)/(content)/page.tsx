@@ -4,16 +4,13 @@ import { getAppConfig } from "~/data-access/appconf";
 import PostCard from "~/components/PostCard";
 import type { Media } from "@payload-types";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
+export const revalidate = 3600;
 
 export default async function Home() {
   const appConfig = await getAppConfig();
 
   // DEBUGGING: Log the config received in the build environment
-  console.log(
-    "App config received during build:",
-    JSON.stringify(appConfig, null, 2),
-  );
 
   // A. TOP-LEVEL GUARD: If config fails to load, show an error or empty state.
   if (!appConfig) {
