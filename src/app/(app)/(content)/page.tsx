@@ -4,9 +4,6 @@ import { getAppConfig } from "~/data-access/appconf";
 import PostCard from "~/components/PostCard";
 import type { Media } from "@payload-types";
 
-export const dynamic = "force-static";
-export const revalidate = 3600;
-
 export default async function Home() {
   const appConfig = await getAppConfig();
 
@@ -86,7 +83,7 @@ export default async function Home() {
                   {researchArticles.map((p) => {
                     const isNew =
                       new Date(p.createdAt) >
-                      new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                      new Date(performance.now() - 7 * 24 * 60 * 60 * 1000);
                     return (
                       <PostCard key={p.id} post={p} isResearch isNew={isNew} />
                     );

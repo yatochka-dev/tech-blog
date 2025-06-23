@@ -1,6 +1,8 @@
 import type { CollectionConfig } from "payload";
 import { z } from "zod";
 import { isSudo, isSudoF } from "~/access/sudo";
+import payload from "~/data-access";
+import { revalidateTag } from "next/cache";
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -8,6 +10,26 @@ export const Users: CollectionConfig = {
     useAsTitle: "username",
   },
   auth: true,
+  hooks: {
+    afterChange: [
+      async (args) => {
+        // if the user for example changes their pfp or their name -> we have to display that
+        const id: number = (args.doc as { id: number }).id;
+        const p = await payload();
+        const { docs } = await p.find({
+          collection: "posts",
+          where: {
+            author: { equals: id },
+          },
+          select: { slug: true }, // I need only ID, but it doesn't let me do that, so Im getting the slug as well
+        });
+
+        for (const post of docs) {
+          revalidateTag(`POST-${post.id}`);
+        }
+      },
+    ],
+  },
   fields: [
     {
       name: "email",

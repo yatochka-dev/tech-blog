@@ -1,10 +1,19 @@
 import type { BasePayload } from "payload";
 import payload from "~/data-access/index";
 import type { Post } from "@payload-types";
-import { cache } from "react";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import {
+  unstable_cacheTag as cacheTag,
+  unstable_cacheLife as cacheLife,
+} from "next/cache";
+
+export const APP_CONFIG_CACHE_TAG = "app-config";
 
 export const getAppConfig = async (p?: BasePayload) => {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag(APP_CONFIG_CACHE_TAG);
+
   const payloadClient = p ?? (await payload());
   console.log("APP CONFIG");
   const conf = await payloadClient.findGlobal({
@@ -20,8 +29,4 @@ export const getAppConfig = async (p?: BasePayload) => {
       researchArticles: conf.landingPageArticles.latestResearch as Post[],
     },
   };
-};
-
-export const revalidateHomePage = () => {
-  revalidatePath("/");
 };

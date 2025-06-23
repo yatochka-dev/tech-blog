@@ -2,7 +2,8 @@ import type { GlobalConfig } from "payload";
 import all from "~/access/all";
 import admin from "~/access/admin";
 import { SeoField } from "~/fields/seo";
-import { revalidateHomePage } from "~/data-access/appconf";
+import { APP_CONFIG_CACHE_TAG } from "~/data-access/appconf";
+import { revalidateTag } from "next/cache";
 
 const MAX_LATEST_ARTICLES = 4;
 const MAX_RESEARCH_ARTICLES = 6;
@@ -20,7 +21,7 @@ export const AppConfig: GlobalConfig = {
     },
   },
   hooks: {
-    afterChange: [revalidateHomePage],
+    afterChange: [() => revalidateTag(APP_CONFIG_CACHE_TAG)],
   },
   fields: [
     {

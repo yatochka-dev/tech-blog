@@ -11,6 +11,10 @@ const config = {
     remotePatterns: [new URL("https://placehold.co/**")],
     unoptimized: true,
   },
+  experimental: {
+    dynamicIO: true,
+    useCache: true,
+  },
 };
 
 export default withPayload(config);
