@@ -10,6 +10,13 @@ export const Users: CollectionConfig = {
     useAsTitle: "username",
   },
   auth: true,
+  access: {
+    create: isSudo,
+    admin: ({ req }) => {
+      return !!req.user?.isAdmin || isSudoF({ req });
+    },
+    unlock: isSudo,
+  },
   hooks: {
     afterChange: [
       async (args) => {
