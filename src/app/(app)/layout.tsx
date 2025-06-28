@@ -9,6 +9,7 @@ import Header from "~/app/(app)/components/Header";
 import Footer from "~/app/(app)/components/Footer";
 import type { Media } from "@payload-types";
 import seoToMetadata from "~/lib/seo-to-metadata";
+import { Suspense } from "react";
 
 // export const metadata: Metadata = {
 //   title: "Create T3 App",
@@ -33,13 +34,13 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const appConfig = await getAppConfig();
   return (
-    <>
+    <Suspense fallback={"loading..."}>
       <Header appConfig={appConfig} />
 
       <main className={"flex-1"}>
         <Providers>{children}</Providers>
       </main>
       <Footer />
-    </>
+    </Suspense>
   );
 }
