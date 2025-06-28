@@ -5,7 +5,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { type getAppConfig } from "~/data-access/appconf";
 import { ThemeToggle } from "~/components/ui/theme-toggle";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Header({
   appConfig,
@@ -13,6 +13,8 @@ export default function Header({
   appConfig: Awaited<ReturnType<typeof getAppConfig>>;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const isSearchPage = pathname === "/search";
   return (
     <header className="bg-background border-b">
       <div className="container mx-auto flex items-center justify-between px-4 py-4">
@@ -26,6 +28,7 @@ export default function Header({
             <Search className="absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2 transform text-gray-500" />
             <Input
               type="search"
+              disabled={isSearchPage}
               placeholder="Search"
               className="h-9 w-40 pl-8 md:w-60"
               onKeyDown={(e) => {

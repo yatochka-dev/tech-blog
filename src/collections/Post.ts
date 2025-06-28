@@ -26,7 +26,7 @@ export const Posts: CollectionConfig = {
      * 4. Returning the modified data with the new slug
      */
     beforeChange: [
-      ({ data, originalDoc, operation }) => {
+      ({ data, originalDoc, operation, req }) => {
         if (!data) return data;
         if (
           operation === "create" ||
@@ -40,6 +40,17 @@ export const Posts: CollectionConfig = {
           data.slug =
             slugify(title, { lower: true, strict: true }) + `-${suffix}`;
         }
+
+        const user = req.user?.id;
+
+        if (!user) {
+          throw new Error("You need to be logged in to create a post");
+        }
+
+        if (operation === "create" && !data.author) {
+          data.author = user;
+        }
+
         return data;
       },
     ],
@@ -101,6 +112,9 @@ export const Posts: CollectionConfig = {
               type: "relationship",
               relationTo: "users",
               required: true,
+              admin: {
+                readOnly: true,
+              },
             },
             {
               name: "tags",
@@ -126,16 +140,17 @@ export const Posts: CollectionConfig = {
                 },
               ],
               defaultValue: "DRAFT",
+              required: true,
             },
-            {
-              name: "comments",
-              type: "relationship",
-              relationTo: "comments",
-              hasMany: true,
-              admin: {
-                hidden: true,
-              },
-            },
+            // {
+            //   name: "comments",
+            //   type: "relationship",
+            //   relationTo: "comments",
+            //   hasMany: true,
+            //   admin: {
+            //     hidden: true,
+            //   },
+            // },
             {
               name: "slug",
               type: "text",

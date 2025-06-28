@@ -20,9 +20,10 @@ export const getAppConfig = async (p?: BasePayload) => {
     slug: "appconf",
     depth: 5,
   });
-
+  const currentYear = new Date().getFullYear();
   return {
     ...conf,
+    currentYear,
     landingPageArticles: {
       heroPost: conf.landingPageArticles.heroPost as Post,
       latestArticles: conf.landingPageArticles.featuredPosts as Post[],

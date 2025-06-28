@@ -136,8 +136,9 @@ export default async function PostPage({
         <aside className="space-y-8 md:col-span-1">
           <ArticleMeta
             author={{
-              avatar: (author.avatar as unknown as Media)
-                .url as unknown as string,
+              avatar:
+                (author.avatar as unknown as { url: string } | null)?.url ??
+                "/default-avatar.jpg",
               name: author.name,
             }}
             publishDate={post.createdAt}

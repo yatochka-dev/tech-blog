@@ -132,7 +132,7 @@ export interface User {
   name: string;
   username: string;
   isAdmin: boolean;
-  avatar?: (number | null) | Media;
+  avatar: number | Media;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -175,8 +175,7 @@ export interface Post {
   cover: number | Media;
   author: number | User;
   tags?: (number | Posttag)[] | null;
-  status?: ('DRAFT' | 'PUBLISHED' | 'ARCHIVED') | null;
-  comments?: (number | Comment)[] | null;
+  status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
   slug: string;
   /**
    * Search engine optimization settings
@@ -355,7 +354,6 @@ export interface PostsSelect<T extends boolean = true> {
   author?: T;
   tags?: T;
   status?: T;
-  comments?: T;
   slug?: T;
   seo?:
     | T
