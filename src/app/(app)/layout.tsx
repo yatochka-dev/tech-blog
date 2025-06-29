@@ -35,12 +35,12 @@ export default async function RootLayout({
   const appConfig = await getAppConfig();
   return (
     <Suspense fallback={"loading..."}>
-      <Header appConfig={appConfig} />
+      <Providers>
+        <Header appConfig={appConfig} />
 
-      <main className={"flex-1"}>
-        <Providers>{children}</Providers>
-      </main>
-      <Footer />
+        <main className={"flex-1"}>{children}</main>
+        <Footer />
+      </Providers>
     </Suspense>
   );
 }
