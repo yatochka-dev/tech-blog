@@ -41,7 +41,7 @@ const Article = async ({ post }: ArticleProps) => {
         </aside>
 
         {/* Main Content */}
-        <div className="md:col-span-3">
+        <div className="mt-8 md:col-span-3">
           <ArticleContent post={post} />
         </div>
       </div>
