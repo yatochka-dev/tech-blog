@@ -3,17 +3,17 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { AlertCircle, Check, Loader2 } from "lucide-react";
-import {type buttonVariants} from "~/components/ui/button";
+import { type buttonVariants } from "~/components/ui/button";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { useStore } from "@tanstack/react-form";
 import { useFormContext } from "~/components/forms/index";
-import type {VariantProps} from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
 
 type ButtonProps = React.ComponentProps<"button"> &
-    VariantProps<typeof buttonVariants> & {
-  asChild?: boolean
-};
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  };
 export interface SubmitButtonProps extends ButtonProps {
   /**
    * The text to display on the button

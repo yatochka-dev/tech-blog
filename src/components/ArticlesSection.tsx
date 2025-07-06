@@ -13,7 +13,8 @@ const articles = [
   },
   {
     id: 3,
-    title: "US brain drain: Nature's guide to the initiatives drawing scientists abroad",
+    title:
+      "US brain drain: Nature's guide to the initiatives drawing scientists abroad",
     summary:
       "In response to US turmoil, premier establishments such as the European Research Council have sweetened incentives to attract talent.",
     image: "https://placehold.co/300x200",
@@ -27,7 +28,7 @@ export default function ArticlesSection() {
   return (
     <section className="py-8">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {articles.map((article) => (
             <ArticleCard key={article.id} {...article} />
           ))}

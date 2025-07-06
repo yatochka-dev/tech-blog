@@ -1,3 +1,3 @@
 export default function all() {
-  return true
+  return true;
 }

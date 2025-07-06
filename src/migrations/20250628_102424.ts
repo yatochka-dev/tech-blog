@@ -1,4 +1,8 @@
-import { type MigrateUpArgs, type MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import {
+  type MigrateUpArgs,
+  type MigrateDownArgs,
+  sql,
+} from "@payloadcms/db-postgres";
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
@@ -7,10 +11,14 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   DROP INDEX IF EXISTS "posts_rels_comments_id_idx";
   ALTER TABLE "users" ALTER COLUMN "avatar_id" SET NOT NULL;
   ALTER TABLE "posts" ALTER COLUMN "status" SET NOT NULL;
-  ALTER TABLE "posts_rels" DROP COLUMN IF EXISTS "comments_id";`)
+  ALTER TABLE "posts_rels" DROP COLUMN IF EXISTS "comments_id";`);
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({
+  db,
+  payload,
+  req,
+}: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
    ALTER TABLE "users" ALTER COLUMN "avatar_id" DROP NOT NULL;
   ALTER TABLE "posts" ALTER COLUMN "status" DROP NOT NULL;
@@ -21,5 +29,5 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
    WHEN duplicate_object THEN null;
   END $$;
   
-  CREATE INDEX IF NOT EXISTS "posts_rels_comments_id_idx" ON "posts_rels" USING btree ("comments_id");`)
+  CREATE INDEX IF NOT EXISTS "posts_rels_comments_id_idx" ON "posts_rels" USING btree ("comments_id");`);
 }

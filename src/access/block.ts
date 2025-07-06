@@ -1,3 +1,3 @@
 export default function block() {
-  return false
+  return false;
 }
