@@ -11,11 +11,13 @@ import type {
   SerializedQuoteNode,
   SerializedUploadNode,
   SerializedListNode,
+  SerializedListItemNode,
 } from "@payloadcms/richtext-lexical";
 import Image from "next/image";
 import { type JSX } from "react";
 import Link from "next/link";
 import { cn } from "~/lib/utils";
+import { Checkbox } from "~/components/ui/checkbox";
 
 interface ArticleContentProps {
   post: Post;
@@ -153,16 +155,18 @@ const CustomListComponent: JSXConverter<SerializedListNode> = ({
   nodesToJSX,
   converters,
 }) => {
-  const isOrdered = node.listType === "number";
+  const listType = node.listType;
+  const isOrdered = listType === "number";
+  const isChecklist = listType === "check";
   const ListTag = isOrdered ? "ol" : "ul";
 
+  const listClass = cn(
+    "ml-6 pl-2 space-y-1",
+    isChecklist ? "list-none" : isOrdered ? "list-decimal" : "list-disc",
+  );
+
   return (
-    <ListTag
-      className={cn(
-        "ml-6 space-y-1 pl-4",
-        isOrdered ? "list-decimal" : "list-disc",
-      )}
-    >
+    <ListTag className={listClass}>
       {nodesToJSX({
         converters,
         nodes: node.children,
@@ -171,6 +175,29 @@ const CustomListComponent: JSXConverter<SerializedListNode> = ({
     </ListTag>
   );
 };
+
+// const CustomTaskListItemComponent: JSXConverter<SerializedListItemNode> = ({
+//   node,
+//   nodesToJSX,
+//   converters,
+// }) => {
+//   const isChecked = node.checked;
+//
+//   return (
+//     <li className="flex items-start gap-2">
+//       {isChecked !== undefined && (
+//         <Checkbox checked={isChecked} disabled className="mt-1" />
+//       )}
+//       <span className={isChecked ? "text-muted-foreground line-through" : ""}>
+//         {nodesToJSX({
+//           converters,
+//           nodes: node.children,
+//           parent: node,
+//         })}
+//       </span>
+//     </li>
+//   );
+// };
 
 const jsxConverters: JSXConvertersFunction<DefaultNodeTypes> = ({
   defaultConverters,
@@ -181,6 +208,7 @@ const jsxConverters: JSXConvertersFunction<DefaultNodeTypes> = ({
   quote: CustomBlockquoteComponent,
   heading: CustomHeadingComponent,
   list: CustomListComponent,
+  // listitem: CustomTaskListItemComponent,
 });
 
 export default function ArticleContent({ post }: ArticleContentProps) {

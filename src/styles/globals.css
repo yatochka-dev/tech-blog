@@ -175,6 +175,9 @@ ul {
   list-style: circle;
 }
 
+input[type="checkbox"][readonly] {
+  margin-right: 0.5rem;
+}
 
 @layer base {
   * {
