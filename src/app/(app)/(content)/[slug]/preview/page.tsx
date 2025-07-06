@@ -1,9 +1,9 @@
-import payload from "~/data-access";
 import type { Metadata } from "next";
 import seoToMetadata from "~/lib/seo-to-metadata";
-import Article from "./article";
-import fetchPost from "~/app/(app)/(content)/[slug]/fetch-post";
+import { fetchDraftPost } from "~/app/(app)/(content)/[slug]/fetch-post";
 import { notFound } from "next/navigation";
+import Article from "../article";
+import { RefreshRouteOnSave } from "~/app/rors";
 
 export async function generateMetadata({
   params,
@@ -12,7 +12,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const s = (await params).slug;
 
-  const post = await fetchPost(s);
+  const post = await fetchDraftPost(s);
 
   if (!post) {
     return {
@@ -31,32 +31,20 @@ export async function generateMetadata({
   };
 }
 
-// export async function generateStaticParams() {
-//   const p = await payload();
-//   const { docs } = await p.find({
-//     collection: "posts",
-//     where: {
-//       status: {
-//         equals: "PUBLISHED",
-//       },
-//     },
-//     select: {
-//       slug: true,
-//     },
-//   });
-//
-//   return docs.map((d) => ({ slug: d.slug }));
-// }
-
 export default async function PostPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await params).slug;
-  const post = await fetchPost(slug);
+  const post = await fetchDraftPost(slug);
 
   if (!post) notFound();
 
-  return <Article post={post} />;
+  return (
+    <>
+      <RefreshRouteOnSave />
+      <Article post={post} />
+    </>
+  );
 }

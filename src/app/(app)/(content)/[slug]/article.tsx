@@ -4,19 +4,12 @@ import ArticleHeader from "~/app/(app)/(content)/[slug]/article-header";
 import ArticleMeta from "~/app/(app)/(content)/[slug]/article-meta";
 import ArticleTags from "~/app/(app)/(content)/[slug]/article-tags";
 import ArticleContent from "~/app/(app)/(content)/[slug]/article-content";
-import { fetchPost } from "~/app/(app)/(content)/[slug]/fetch-post";
-import { notFound } from "next/navigation";
 
 interface ArticleProps {
-  p: Promise<{ slug: string }>;
+  post: Post;
 }
 
-const Article = async ({ p }: ArticleProps) => {
-  const { slug } = await p;
-  const post = await fetchPost(slug);
-
-  if (!post) notFound();
-
+const Article = async ({ post }: ArticleProps) => {
   const cover = post.cover as unknown as Media;
   const author = post.author as unknown as User;
 
@@ -30,7 +23,7 @@ const Article = async ({ p }: ArticleProps) => {
         coverAlt={cover.alt}
       />
 
-      <div className="container mx-auto mt-8 grid gap-8 px-4 md:grid-cols-4">
+      <div className="container mx-auto mt-8 grid grid-cols-1 gap-8 px-4 md:grid-cols-4">
         {/* Article Sidebar */}
         <aside className="space-y-8 md:col-span-1">
           <ArticleMeta
@@ -45,12 +38,12 @@ const Article = async ({ p }: ArticleProps) => {
           />
 
           <ArticleTags tags={post.tags as unknown as Posttag[]} />
-
-          {/* Main Content */}
-          <main className="md:col-span-3">
-            <ArticleContent post={post} />
-          </main>
         </aside>
+
+        {/* Main Content */}
+        <div className="md:col-span-3">
+          <ArticleContent post={post} />
+        </div>
       </div>
     </article>
   );

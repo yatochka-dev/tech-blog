@@ -1,7 +1,7 @@
 import type { Post } from "@payload-types";
 import {
+  type JSXConverter,
   type JSXConvertersFunction,
-  LinkJSXConverter,
   RichText,
 } from "@payloadcms/richtext-lexical/react";
 import type {
@@ -10,7 +10,9 @@ import type {
   SerializedUploadNode,
 } from "@payloadcms/richtext-lexical";
 import Image from "next/image";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
+import Link from "next/link";
+import { cn } from "~/lib/utils";
 
 interface ArticleContentProps {
   post: Post;
@@ -27,26 +29,25 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
     case "posts":
       return `/${slug}`;
     default:
-      return `/#idk-how-to-link-to-that`;
+      return `/#link-error`;
   }
 };
 
-const CustomUploadComponent: FC<{
-  node: SerializedUploadNode;
-}> = ({ node }) => {
+const CustomUploadComponent: JSXConverter<SerializedUploadNode> = ({
+  node,
+}) => {
   if (node.relationTo === "media") {
     const uploadDoc = node.value;
-    if (typeof uploadDoc !== "object") {
-      return null;
-    }
+    if (typeof uploadDoc !== "object") return null;
+
     const { alt, height, url, width } = uploadDoc;
     return (
       <Image
         alt={alt}
         height={height ?? undefined}
-        src={url ?? "#"}
         width={width ?? undefined}
-        data-test="hello"
+        src={url ?? "#"}
+        className="my-4"
       />
     );
   }
@@ -54,25 +55,70 @@ const CustomUploadComponent: FC<{
   return null;
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+const CustomLinkComponent: JSXConverter<SerializedLinkNode> = ({
+  node,
+  converters,
+  nodesToJSX,
+}) => {
+  if (node.type !== "link") return null;
+  const href =
+    node.fields.linkType === "custom"
+      ? (node.fields.url ?? "/#")
+      : internalDocToHref({ linkNode: node });
+
+  const newTab = node.fields.newTab;
+
+  return (
+    <Link
+      dir={node.direction ?? undefined}
+      href={href}
+      className={cn(
+        "text-blue-400 underline transition duration-75 hover:text-blue-600",
+      )}
+      target={newTab ? "_blank" : "_self"}
+      rel={node?.fields?.rel?.toString().replace(/,/g, " ") ?? undefined}
+    >
+      {nodesToJSX({
+        converters: converters,
+        parent: this,
+        nodes: node.children,
+      })}
+    </Link>
+  );
+};
+
+import type { SerializedQuoteNode } from "@payloadcms/richtext-lexical";
+
+const CustomBlockquoteComponent: JSXConverter<SerializedQuoteNode> = ({
+  nodesToJSX,
+  node,
+  converters,
+}) => {
+  return (
+    <blockquote className="text-muted-foreground my-3 border-l-3 border-gray-300 pl-3 italic">
+      {nodesToJSX({
+        converters,
+        nodes: node.children,
+        parent: this,
+      })}
+    </blockquote>
+  );
+};
+
 const jsxConverters: JSXConvertersFunction<DefaultNodeTypes> = ({
   defaultConverters,
-}) => {
-  return {
-    ...defaultConverters,
-    upload: CustomUploadComponent,
-
-    ...LinkJSXConverter({ internalDocToHref }),
-  };
-};
+}) => ({
+  ...defaultConverters,
+  upload: CustomUploadComponent,
+  link: CustomLinkComponent,
+  quote: CustomBlockquoteComponent,
+});
 
 export default function ArticleContent({ post }: ArticleContentProps) {
   const content = post.content;
+
   return (
     <div className="prose prose-lg max-w-none">
-      {/*<pre>{JSON.stringify(content.root.children, null, 2)}</pre>*/}
-
       <RichText data={content} converters={jsxConverters} />
     </div>
   );

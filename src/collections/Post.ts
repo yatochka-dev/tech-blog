@@ -3,10 +3,37 @@ import slugify from "slugify";
 import { SeoField } from "~/fields/seo";
 import { APP_CONFIG_CACHE_TAG } from "~/data-access/appconf";
 import { revalidateTag } from "next/cache";
-import type { Post } from "@payload-types";
+import { fetchDraftPost } from "~/app/(app)/(content)/[slug]/fetch-post";
+import { env } from "~/env";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
+  admin: {
+    livePreview: {
+      url: async (args) => {
+        const post = await fetchDraftPost(args.data.id as string, true);
+
+        if (!post) return env.NEXT_PUBLIC_APP_URL;
+
+        const slug = post.slug;
+        if (!slug) {
+          return "http://localhost:3000";
+        }
+        return `${env.NEXT_PUBLIC_APP_URL}/${slug}/preview`;
+      },
+    },
+  },
+  versions: {
+    maxPerDoc: 0,
+    drafts: {
+      schedulePublish: true,
+      autosave: {
+        showSaveDraftButton: false,
+        interval: 150,
+      },
+      validate: true,
+    },
+  },
   hooks: {
     /**
      * Hook that generates a unique slug for posts before creation or title update
@@ -26,12 +53,9 @@ export const Posts: CollectionConfig = {
      * 4. Returning the modified data with the new slug
      */
     beforeChange: [
-      ({ data, originalDoc, operation, req }) => {
+      ({ data, operation, req }) => {
         if (!data) return data;
-        if (
-          operation === "create" ||
-          data.title != (originalDoc as { title: string }).title
-        ) {
+        if (operation === "create") {
           const title: string = data.title as unknown as string;
 
           // random six chars
@@ -54,14 +78,7 @@ export const Posts: CollectionConfig = {
         return data;
       },
     ],
-    afterChange: [
-      () => revalidateTag(APP_CONFIG_CACHE_TAG),
-      ({ previousDoc }) => {
-        const id: number = (previousDoc as Post).id ?? "";
-        console.log(id, previousDoc);
-        revalidateTag(`POST-${id}`);
-      },
-    ],
+    afterChange: [() => revalidateTag(APP_CONFIG_CACHE_TAG)],
     afterDelete: [() => revalidateTag(APP_CONFIG_CACHE_TAG)],
   },
   fields: [
@@ -123,24 +140,14 @@ export const Posts: CollectionConfig = {
               hasMany: true,
             },
             {
-              name: "status",
-              type: "select",
-              options: [
-                {
-                  label: "Draft",
-                  value: "DRAFT",
-                },
-                {
-                  label: "Published",
-                  value: "PUBLISHED",
-                },
-                {
-                  label: "Archived",
-                  value: "ARCHIVED",
-                },
-              ],
-              defaultValue: "DRAFT",
+              name: "visible",
+              type: "checkbox",
+              defaultValue: false,
               required: true,
+              admin: {
+                description:
+                  "Needed when the article is still being written or should be hidden.",
+              },
             },
             // {
             //   name: "comments",
