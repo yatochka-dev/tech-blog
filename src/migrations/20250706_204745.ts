@@ -87,7 +87,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "posts" ALTER COLUMN "seo_meta_description" DROP NOT NULL;
   ALTER TABLE "posts" ALTER COLUMN "content" DROP NOT NULL;
   ALTER TABLE "posts" ADD COLUMN "visible" boolean DEFAULT false;
-  ALTER TABLE "posts" ADD COLUMN "_status" "enum_posts_status" DEFAULT 'draft';
   ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "payload_jobs_id" integer;
   DO $$ BEGIN
    ALTER TABLE "_posts_v" ADD CONSTRAINT "_posts_v_parent_id_posts_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."posts"("id") ON DELETE set null ON UPDATE no action;
