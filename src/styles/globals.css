@@ -163,6 +163,14 @@ body {
   letter-spacing: var(--tracking-normal);
 }
 
+ul {
+  list-style: circle;
+}
+
+ol {
+  list-style: lower-latin;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

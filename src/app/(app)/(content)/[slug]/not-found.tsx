@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
 
-export function PostNotFound() {
+export default function NotFound() {
   return (
     <div className={"flex h-[60dvh] w-full items-center justify-center"}>
       <Alert variant="destructive" className={"container mx-auto max-w-md"}>

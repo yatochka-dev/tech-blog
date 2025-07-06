@@ -39,6 +39,9 @@ export default buildConfig({
   admin: {
     meta: {},
     user: Users.slug,
+    livePreview: {
+      collections: ["posts"],
+    },
   },
   // Define and configure your collections in this array
   collections: [Users, Media, Posts, Comment, PostTag],

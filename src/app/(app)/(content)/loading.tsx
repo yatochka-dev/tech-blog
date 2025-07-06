@@ -1,3 +1,3 @@
-export default function GlobalLoading() {
-  return <>Loading...</>;
-}
+import { Loading } from "~/components/ui/loading";
+
+export default Loading;

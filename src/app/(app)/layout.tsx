@@ -10,6 +10,7 @@ import Footer from "~/app/(app)/components/Footer";
 import type { Media } from "@payload-types";
 import seoToMetadata from "~/lib/seo-to-metadata";
 import { Suspense } from "react";
+import { Loading } from "~/components/ui/loading";
 
 // export const metadata: Metadata = {
 //   title: "Create T3 App",
@@ -20,11 +21,10 @@ import { Suspense } from "react";
 export async function generateMetadata(): Promise<Metadata> {
   const appConfig = await getAppConfig();
   const seo = appConfig.seo || {};
-
   return {
     ...seoToMetadata(seo),
     icons: {
-      icon: (appConfig.favicon as Media).url ?? "/favicon.ico",
+      icon: (appConfig.favicon as Media)?.url ?? "/favicon.ico",
     },
   };
 }
@@ -34,7 +34,7 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const appConfig = await getAppConfig();
   return (
-    <Suspense fallback={"loading..."}>
+    <Suspense fallback={<Loading />}>
       <Providers>
         <Header appConfig={appConfig} />
 

@@ -1,7 +1,6 @@
 import type { BasePayload } from "payload";
 import payload from "~/data-access/index";
 import type { Post } from "@payload-types";
-import { revalidatePath, revalidateTag } from "next/cache";
 import {
   unstable_cacheTag as cacheTag,
   unstable_cacheLife as cacheLife,

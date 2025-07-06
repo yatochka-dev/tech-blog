@@ -104,7 +104,6 @@ export const Users: CollectionConfig = {
       name: "avatar",
       type: "upload",
       relationTo: "media",
-      required: true,
     },
   ],
 };

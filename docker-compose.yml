@@ -6,11 +6,16 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mydb
+      POSTGRES_DB: mydbs
     ports:
-      - "5101:5432"
+      - "5102:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data1
+      - db_data:/var/lib/postgresql/data13
+  adminer:
+    image: adminer
+    container_name: adminer-blog-nonprofit
+    ports:
+      - "7071:8080"
 
 volumes:
   db_data:
