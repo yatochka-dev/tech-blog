@@ -10,7 +10,7 @@ services:
     ports:
       - "5102:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data13
+      - db_data:/var/lib/postgresql/data14
   adminer:
     image: adminer
     container_name: adminer-blog-nonprofit
