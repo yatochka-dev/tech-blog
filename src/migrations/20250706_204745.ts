@@ -33,7 +33,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"version_content" jsonb,
   	"version_updated_at" timestamp(3) with time zone,
   	"version_created_at" timestamp(3) with time zone,
-  	"version__status" "enum__posts_v_version_status" DEFAULT 'draft',
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"latest" boolean,
