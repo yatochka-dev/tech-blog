@@ -6,11 +6,13 @@ import {
 } from "@payloadcms/richtext-lexical/react";
 import type {
   DefaultNodeTypes,
+  SerializedHeadingNode,
   SerializedLinkNode,
+  SerializedQuoteNode,
   SerializedUploadNode,
 } from "@payloadcms/richtext-lexical";
 import Image from "next/image";
-import { type FC, Fragment } from "react";
+import { type JSX } from "react";
 import Link from "next/link";
 import { cn } from "~/lib/utils";
 
@@ -87,8 +89,6 @@ const CustomLinkComponent: JSXConverter<SerializedLinkNode> = ({
   );
 };
 
-import type { SerializedQuoteNode } from "@payloadcms/richtext-lexical";
-
 const CustomBlockquoteComponent: JSXConverter<SerializedQuoteNode> = ({
   nodesToJSX,
   node,
@@ -105,6 +105,48 @@ const CustomBlockquoteComponent: JSXConverter<SerializedQuoteNode> = ({
   );
 };
 
+const CustomHeadingComponent: JSXConverter<SerializedHeadingNode> = ({
+  node,
+  nodesToJSX,
+  converters,
+}) => {
+  const HeadingTag = `${node.tag}` as keyof JSX.IntrinsicElements;
+
+  function getClass(tag: typeof node.tag): string {
+    switch (tag) {
+      case "h1":
+        return "text-5xl font-extrabold leading-tight";
+      case "h2":
+        return "text-4xl font-bold leading-snug";
+      case "h3":
+        return "text-3xl font-semibold leading-snug";
+      case "h4":
+        return "text-2xl font-medium leading-normal";
+      case "h5":
+        return "text-xl font-medium leading-relaxed";
+      case "h6":
+        return "text-lg font-medium leading-relaxed";
+      default:
+        return "text-4xl font-bold leading-snug"; // fallback
+    }
+  }
+
+  return (
+    <HeadingTag
+      className={cn(
+        "text-primary scroll-mt-20 text-xl font-bold tracking-tight",
+        getClass(node.tag),
+      )}
+    >
+      {nodesToJSX({
+        converters,
+        nodes: node.children,
+        parent: node,
+      })}
+    </HeadingTag>
+  );
+};
+
 const jsxConverters: JSXConvertersFunction<DefaultNodeTypes> = ({
   defaultConverters,
 }) => ({
@@ -112,6 +154,7 @@ const jsxConverters: JSXConvertersFunction<DefaultNodeTypes> = ({
   upload: CustomUploadComponent,
   link: CustomLinkComponent,
   quote: CustomBlockquoteComponent,
+  heading: CustomHeadingComponent,
 });
 
 export default function ArticleContent({ post }: ArticleContentProps) {
