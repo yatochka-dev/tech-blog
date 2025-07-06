@@ -175,9 +175,7 @@ ul {
   list-style: circle;
 }
 
-input[type="checkbox"][readonly] {
-  margin-right: 0.5rem;
-}
+
 
 @layer base {
   * {
@@ -185,5 +183,8 @@ input[type="checkbox"][readonly] {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  input[type="checkbox"][readonly] {
+    @apply rounded-sm border border-input bg-input/30 p-0.5 dark:bg-input/20 mr-2;
   }
 }
