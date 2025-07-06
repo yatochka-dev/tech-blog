@@ -1,10 +1,8 @@
-import { unstable_cacheLife } from "next/cache";
 import payload from "~/data-access";
-import { cache } from "react";
 import type { CollectionSlug } from "payload";
 import type { Post } from "@payload-types";
 
-export default cache(async function fetchPost(slug: string) {
+export default async function fetchPost(slug: string) {
   const p = await payload();
 
   const { docs } = await p.find({
@@ -24,7 +22,7 @@ export default cache(async function fetchPost(slug: string) {
 
   const post = docs[0];
   return post;
-});
+}
 
 export async function fetchDraftPost(slug: string, id = false) {
   const p = await payload();
