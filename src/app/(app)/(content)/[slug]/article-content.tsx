@@ -10,6 +10,7 @@ import type {
   SerializedLinkNode,
   SerializedQuoteNode,
   SerializedUploadNode,
+  SerializedListNode,
 } from "@payloadcms/richtext-lexical";
 import Image from "next/image";
 import { type JSX } from "react";
@@ -147,6 +148,30 @@ const CustomHeadingComponent: JSXConverter<SerializedHeadingNode> = ({
   );
 };
 
+const CustomListComponent: JSXConverter<SerializedListNode> = ({
+  node,
+  nodesToJSX,
+  converters,
+}) => {
+  const isOrdered = node.listType === "number";
+  const ListTag = isOrdered ? "ol" : "ul";
+
+  return (
+    <ListTag
+      className={cn(
+        "ml-6 space-y-1 pl-4",
+        isOrdered ? "list-decimal" : "list-disc",
+      )}
+    >
+      {nodesToJSX({
+        converters,
+        nodes: node.children,
+        parent: node,
+      })}
+    </ListTag>
+  );
+};
+
 const jsxConverters: JSXConvertersFunction<DefaultNodeTypes> = ({
   defaultConverters,
 }) => ({
@@ -155,6 +180,7 @@ const jsxConverters: JSXConvertersFunction<DefaultNodeTypes> = ({
   link: CustomLinkComponent,
   quote: CustomBlockquoteComponent,
   heading: CustomHeadingComponent,
+  list: CustomListComponent,
 });
 
 export default function ArticleContent({ post }: ArticleContentProps) {
