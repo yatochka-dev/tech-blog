@@ -2,28 +2,26 @@
 import { useQueryState } from "nuqs";
 import { z } from "zod";
 import { api } from "~/trpc/react";
-import Header from "~/app/(app)/(content)/search/header";
-import SearchFiltersComponent from "~/app/(app)/(content)/search/aside";
+import Header, { useArticlesLimit } from "~/app/(app)/(content)/search/header";
+import SearchFiltersComponent, {
+  useTags,
+} from "~/app/(app)/(content)/search/aside";
+import { useEffect } from "react";
 
 export default function SearchPage() {
   const [search] = useQueryState("q", { defaultValue: "" });
-  const [tags, setTags] = useQueryState<number[]>("tags", {
-    serialize: (value) => {
-      return JSON.stringify(value);
-    },
-    defaultValue: [],
-    parse: (value) => {
-      console.log(value);
-      const schema = z.number().positive().array();
-      const { data, success } = schema.safeParse(JSON.parse(value));
-      if (!success) return [];
-      return data;
-    },
-  });
+
+  const [limit] = useArticlesLimit();
+  const [tags] = useTags();
+  useEffect(() => {
+    console.log("search", search);
+    console.log("tags", tags);
+  }, [search, tags]);
 
   const { data } = api.posts.search.useQuery({
     query: search,
     tags: tags,
+    limit: limit,
   });
 
   return (
@@ -34,7 +32,9 @@ export default function SearchPage() {
         <aside className={"col-span-4 md:col-span-2 lg:col-span-1"}>
           <SearchFiltersComponent />
         </aside>
-        <div className={"md:col-span-2 lg:col-span-3"}></div>
+        <pre className={"md:col-span-2 lg:col-span-3"}>
+          {/*{JSON.stringify(data, null, 2)}*/}
+        </pre>
       </div>
     </div>
   );

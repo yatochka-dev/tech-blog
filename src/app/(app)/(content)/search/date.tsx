@@ -11,10 +11,24 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
+import { parseAsJson, useQueryState } from "nuqs";
+import { z } from "zod";
+import { displayDate } from "~/lib/date";
+
+const schema = z
+  .object({
+    from: z.date(),
+    to: z.date().optional(),
+  })
+  .optional();
+
+const useDateRange = () => {
+  return useQueryState("dateRange", parseAsJson(schema.parse));
+};
 
 export function DatePicker() {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
+  const [range, setRange] = useDateRange();
 
   return (
     <div className="flex flex-col gap-3">
@@ -25,17 +39,25 @@ export function DatePicker() {
             id="date"
             className="w-48 justify-between font-normal"
           >
-            {date ? date.toLocaleDateString() : "Select date"}
+            {!!range
+              ? `${displayDate(range.from)} - ${!!range.to ? displayDate(range.to) : "present"}`
+              : "Select Date"}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           <Calendar
-            mode="single"
-            selected={date}
+            mode="range"
+            selected={range ?? { from: new Date(1970, 1, 1) }}
             captionLayout="dropdown"
-            onSelect={(date) => {
-              setDate(date);
+            numberOfMonths={2}
+            onSelect={async (date) => {
+              if (!date) return;
+
+              await setRange({
+                from: date.from ?? new Date(1970, 1, 1),
+                to: date.to,
+              });
               setOpen(false);
             }}
           />

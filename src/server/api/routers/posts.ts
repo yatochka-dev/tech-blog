@@ -13,11 +13,37 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         query: z.string(),
-        tags: z.number().positive().array(),
+        tags: z
+          .array(z.union([z.string(), z.number()]))
+          .transform((ids) => ids.map((id) => Number(id))),
+
+        limit: z.number().min(1).max(100).default(10),
+        page: z.number().min(1).default(1),
       }),
     )
     .query(async ({ input }) => {
-      return input;
+      const p = await payload();
+      const posts = await p.find({
+        collection: "posts",
+        limit: input.limit,
+        page: input.page,
+        where: {
+          title: {
+            contains: input.query,
+          },
+          and: [
+            {
+              or: input.tags.map((tagId) => ({
+                tags: {
+                  contains: tagId,
+                },
+              })),
+            },
+          ],
+        },
+      });
+
+      return posts;
     }),
   getTags: publicProcedure
     .input(
