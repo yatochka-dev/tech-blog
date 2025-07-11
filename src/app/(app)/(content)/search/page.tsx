@@ -20,7 +20,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
-import type { MouseEventHandler } from "react";
 
 export default function SearchPage() {
   const [search] = useQueryState("q", { defaultValue: "" });
@@ -50,14 +49,6 @@ export default function SearchPage() {
     throw new Error(
       "Something went wrong while loading your articles, please try again later.",
     );
-  }
-
-  async function onPageChange(func: () => Promise<void>) {
-    return async (event: MouseEvent) => {
-      event?.stopPropagation();
-      event?.preventDefault();
-      await func();
-    };
   }
 
   return (
