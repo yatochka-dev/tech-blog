@@ -16,11 +16,11 @@ export const Comment: CollectionConfig = {
       required: true,
       defaultValue: "Comment",
     },
-    {
-      name: "replies",
-      type: "relationship",
-      relationTo: "comments",
-      hasMany: true,
-    },
+    // {
+    //   name: "replies",
+    //   type: "relationship",
+    //   relationTo: "comments",
+    //   hasMany: true,
+    // },
   ],
 };
