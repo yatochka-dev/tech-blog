@@ -1,5 +1,5 @@
 "use client";
-import { useQueryState } from "nuqs";
+import { useQueryState, parseAsInteger } from "nuqs";
 import { api } from "~/trpc/react";
 import SearchHeader, {
   useArticlesLimit,
@@ -11,11 +11,25 @@ import ArticleCard from "~/components/article-card";
 import { displayDate } from "~/lib/date";
 import { TextShimmer } from "~/components/ui/text-shimmer";
 import type { Media } from "@payload-types";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "~/components/ui/pagination";
+import type { MouseEventHandler } from "react";
 
 export default function SearchPage() {
   const [search] = useQueryState("q", { defaultValue: "" });
   const [limit] = useArticlesLimit();
   const [tags] = useTags();
+  const [page, setPage] = useQueryState("page", {
+    defaultValue: 1,
+    ...parseAsInteger,
+  });
 
   // // Log only in development to avoid noisy console in production
   // useEffect(() => {
@@ -26,9 +40,9 @@ export default function SearchPage() {
   // }, [search, tags]);
 
   const { data, isLoading, isError } = api.posts.search.useQuery(
-    { query: search, tags, limit },
+    { query: search, tags, limit, page },
     {
-      staleTime: 60_000, // keep fresh for 1 min to reduce flicker on filter changes
+      staleTime: 60_000,
     },
   );
 
@@ -36,6 +50,14 @@ export default function SearchPage() {
     throw new Error(
       "Something went wrong while loading your articles, please try again later.",
     );
+  }
+
+  async function onPageChange(func: () => Promise<void>) {
+    return async (event: MouseEvent) => {
+      event?.stopPropagation();
+      event?.preventDefault();
+      await func();
+    };
   }
 
   return (
@@ -50,7 +72,7 @@ export default function SearchPage() {
         </aside>
 
         {/* Results */}
-        <section className="lg:col-span-3">
+        <section className="flex min-h-full flex-col lg:col-span-3">
           {isLoading && (
             <div className="text-center">
               <TextShimmer duration={1}>Loading articles...</TextShimmer>
@@ -61,7 +83,7 @@ export default function SearchPage() {
             <p className="text-center">No articles matched your search.</p>
           )}
 
-          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid flex-grow grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {data?.docs?.map((post) => (
               <li key={post.id} className="h-full">
                 <ArticleCard
@@ -76,6 +98,94 @@ export default function SearchPage() {
               </li>
             ))}
           </ul>
+
+          {data && (
+            <div className={"mt-auto"}>
+              <Pagination>
+                <PaginationContent>
+                  {data.hasPrevPage && (
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={async () => {
+                          await setPage((p) => p - 1);
+                        }}
+                      />
+                    </PaginationItem>
+                  )}
+                  {(data?.page ?? 1) - 2 > 1 && (
+                    <>
+                      <PaginationItem
+                        onClick={async () => {
+                          await setPage(() => 1);
+                        }}
+                      >
+                        <PaginationLink>1</PaginationLink>
+                      </PaginationItem>
+                      {(data?.page ?? 1) - 3 > 1 && (
+                        <PaginationItem>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                      )}
+                    </>
+                  )}
+                  {(data?.page ?? 1) - 2 > 0 && (
+                    <PaginationItem
+                      onClick={async () => {
+                        await setPage((p) => p - 2);
+                      }}
+                    >
+                      <PaginationLink>{(data?.page ?? 1) - 2}</PaginationLink>
+                    </PaginationItem>
+                  )}
+                  {(data?.page ?? 1) - 1 > 0 && (
+                    <PaginationItem
+                      onClick={async () => {
+                        await setPage((p) => p - 1);
+                      }}
+                    >
+                      <PaginationLink>{(data?.page ?? 1) - 1}</PaginationLink>
+                    </PaginationItem>
+                  )}
+                  <PaginationItem>
+                    <PaginationLink isActive>{data.page}</PaginationLink>
+                  </PaginationItem>
+                  {data.totalPages >= (data.page ?? 1) + 1 && (
+                    <PaginationItem
+                      onClick={async () => {
+                        await setPage((p) => p + 1);
+                      }}
+                    >
+                      <PaginationLink>{(data?.page ?? 1) + 1}</PaginationLink>
+                    </PaginationItem>
+                  )}
+                  {data.totalPages - 2 > (data.page ?? 1) && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+                  {data.totalPages - 1 > (data.page ?? 1) && (
+                    <PaginationItem
+                      onClick={async () => {
+                        await setPage((p) => data.totalPages);
+                      }}
+                    >
+                      <PaginationLink>{data?.totalPages}</PaginationLink>
+                    </PaginationItem>
+                  )}
+
+                  {data.hasNextPage && (
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={async () => {
+                          await setPage((p) => p + 1);
+                        }}
+                      />
+                    </PaginationItem>
+                  )}
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </section>
       </div>
     </div>

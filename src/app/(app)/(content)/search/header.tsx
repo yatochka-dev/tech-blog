@@ -15,7 +15,7 @@ import {
 
 export const useArticlesLimit = () => {
   return useQueryState<number>("limit", {
-    defaultValue: 25,
+    defaultValue: 1,
     parse: parseAsInteger.parse,
     serialize: parseAsInteger.serialize,
   });

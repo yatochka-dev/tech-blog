@@ -38,7 +38,7 @@ export default function ArticleCard({
         </h3>
       </Link>
       <p className="text-sm text-gray-700">{summary}</p>
-      <div className="mt-auto pt-2">
+      <div className="pt-2">
         <p className="text-xs text-gray-500">{date}</p>
       </div>
     </div>

@@ -175,6 +175,10 @@ ul {
   list-style: circle;
 }
 
+ul[data-pagination] {
+  list-style: none;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
