@@ -172,11 +172,11 @@ body {
 }
 
 ul {
-  list-style: circle;
+  list-style: none;
 }
 
-ul[data-pagination] {
-  list-style: none;
+ul[data-styled] {
+  list-style: circle;
 }
 
 @layer base {
