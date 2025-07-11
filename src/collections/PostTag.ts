@@ -4,6 +4,10 @@ import admin from "~/access/admin";
 
 export const PostTag: CollectionConfig = {
   slug: "posttags",
+  labels: {
+    plural: "Article Tags",
+    singular: "Article Tag",
+  },
   access: {
     read: all,
     create: admin,

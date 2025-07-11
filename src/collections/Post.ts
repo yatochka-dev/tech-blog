@@ -9,6 +9,10 @@ import { env } from "~/env";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
+  labels: {
+    plural: "Articles",
+    singular: "Article",
+  },
   admin: {
     livePreview: {
       url: async (args) => {

@@ -44,7 +44,7 @@ export default buildConfig({
     },
   },
   // Define and configure your collections in this array
-  collections: [Users, Media, Posts, Comment, PostTag],
+  collections: [Users, Media, Posts, PostTag],
   globals: [AppConfig],
 
   // Your Payload secret - should be a complex and secure string, unguessable
