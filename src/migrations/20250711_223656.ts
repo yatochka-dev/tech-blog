@@ -10,7 +10,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "comments_rels" DISABLE ROW LEVEL SECURITY;
   DROP TABLE "comments" CASCADE;
   DROP TABLE "comments_rels" CASCADE;
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_comments_fk";
   
   DROP INDEX IF EXISTS "payload_locked_documents_rels_comments_id_idx";
   ALTER TABLE "media" ALTER COLUMN "alt" SET DEFAULT '';
