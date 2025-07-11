@@ -1,9 +1,11 @@
-import { Loader2 } from "lucide-react";
+import { TextShimmer } from "./text-shimmer";
 
 export function Loading() {
   return (
     <div className="flex min-h-[70dvh] items-center justify-center">
-      <Loader2 className="h-12 w-12 animate-spin" />
+      <TextShimmer duration={1} className={"text-2xl"}>
+        Loading article...
+      </TextShimmer>
     </div>
   );
 }

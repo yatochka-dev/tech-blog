@@ -59,7 +59,7 @@ export const AppConfig: GlobalConfig = {
                   name: "featuredPosts",
                   label: "Featured Posts",
                   type: "relationship",
-                  validate: (value, options) => {
+                  validate: (value) => {
                     console.log(value);
                     if (!value) return "Please select at least one post.";
                     if (
@@ -81,13 +81,12 @@ export const AppConfig: GlobalConfig = {
                   name: "latestResearch",
                   label: "Latest Research",
                   type: "relationship",
-                  validate: (value, options) => {
-                    console.log(value);
+                  validate: (value) => {
                     if (!value) return "Please select at least one post.";
-                    if (
-                      value.values.length > MAX_RESEARCH_ARTICLES ||
-                      value.length > MAX_RESEARCH_ARTICLES
-                    ) {
+                    const length = Array.isArray(value)
+                      ? value.length
+                      : (value as { values: [] }).values?.length || 0;
+                    if (length > MAX_RESEARCH_ARTICLES) {
                       return `You can only select up to ${MAX_RESEARCH_ARTICLES} posts.`;
                     }
                     return true;

@@ -9,8 +9,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
+import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const { setTheme, theme } = useTheme();
   const icon =
     theme === "dark" ? (
@@ -20,6 +27,8 @@ export function ThemeToggle() {
     ) : (
       <Laptop className="h-4 w-4" />
     );
+
+  if (!isClient) return null;
 
   return (
     <DropdownMenu>

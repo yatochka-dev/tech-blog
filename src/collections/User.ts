@@ -71,15 +71,16 @@ export const Users: CollectionConfig = {
         position: "sidebar",
       },
       validate: (value: unknown) => {
-        console.log(value);
-        // only lowecase letter, _, - and numbers
-        const schema = z.string();
+        // only lowercase letters, _, - and numbers
+        const schema = z.string().regex(/^[-a-z0-9_]+$/);
 
-        const { success, error } = schema.safeParse(JSON.stringify(value));
-        console.log(success);
+        const { success, error } = schema.safeParse(value);
 
         if (!success) {
-          return error?.issues[0]?.message ?? "Invalid username";
+          return (
+            error?.issues[0]?.message ??
+            "Username must contain only lowercase letters, numbers, underscores, and hyphens"
+          );
         }
 
         return true;

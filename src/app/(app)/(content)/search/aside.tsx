@@ -1,14 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Calendar, Filter, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Filter } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { Badge } from "~/components/ui/badge";
 import { Checkbox } from "~/components/ui/checkbox";
-import { DatePicker } from "~/app/(app)/(content)/search/date";
 import { api } from "~/trpc/react";
 import {
   Accordion,
@@ -16,9 +14,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
-import { parseAsIsoDate, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 import { z } from "zod";
 import { TextShimmer } from "~/components/ui/text-shimmer";
+import { cn } from "~/lib/utils";
+import { useIsMobile } from "~/hooks/use-mobile";
 
 export const useTags = () => {
   return useQueryState<number[]>("tags", {
@@ -37,7 +37,6 @@ export const useTags = () => {
 };
 
 export default function SearchFiltersComponent() {
-  const [showAllTags, setShowAllTags] = useState(false);
   const [tagSearch, setTagSearch] = useState("");
   const [filteredTags, setFilteredTags] = useTags();
 
@@ -48,12 +47,14 @@ export default function SearchFiltersComponent() {
     return tags === undefined || query.isLoading;
   }, [tags, query.isLoading]);
 
+  const isMobile = useIsMobile();
+
   return (
     <Accordion
       type="single"
       collapsible
       className="w-full"
-      defaultValue="item-1"
+      defaultValue={isMobile ? undefined : "item-1"}
     >
       <AccordionItem value="item-1">
         <AccordionTrigger className={"flex cursor-pointer items-center"}>
@@ -69,9 +70,23 @@ export default function SearchFiltersComponent() {
             {/* Tags Filter */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm">Tags</CardTitle>
+                <CardTitle className="flex items-center justify-between text-sm">
+                  Tags{" "}
+                  <div className={cn(filteredTags.length === 0 && "opacity-0")}>
+                    <Button
+                      variant={"ghost"}
+                      size={"sm"}
+                      className={"cursor-pointer py-0 leading-none"}
+                      onClick={async () => {
+                        await setFilteredTags([]);
+                      }}
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                </CardTitle>
               </CardHeader>
-              <CardContent className="h-48 space-y-4">
+              <CardContent className="h-96 space-y-4">
                 <Input
                   placeholder="Search tags..."
                   value={tagSearch}
@@ -79,7 +94,7 @@ export default function SearchFiltersComponent() {
                   className="h-8"
                 />
 
-                <div className="max-h-36 space-y-2 overflow-y-auto">
+                <div className="max-h-84 space-y-2 overflow-y-auto">
                   {!isLoadingTags ? (
                     tags?.map((t) => (
                       <div key={t.id} className="flex items-center space-x-2">
@@ -135,34 +150,25 @@ export default function SearchFiltersComponent() {
             </Card>
 
             {/* Date Range Filter */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center text-sm">
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Publication Date
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label
-                    htmlFor="date-from"
-                    className="text-muted-foreground text-xs"
-                  >
-                    From
-                  </Label>
-                  <DatePicker />
-                </div>
-                <div>
-                  <Label
-                    htmlFor="date-to"
-                    className="text-muted-foreground text-xs"
-                  >
-                    To
-                  </Label>
-                  <DatePicker />
-                </div>
-              </CardContent>
-            </Card>
+            {/*<Card>*/}
+            {/*  <CardHeader>*/}
+            {/*    <CardTitle className="flex items-center text-sm">*/}
+            {/*      <Calendar className="mr-2 h-4 w-4" />*/}
+            {/*      Publication Date*/}
+            {/*    </CardTitle>*/}
+            {/*  </CardHeader>*/}
+            {/*  <CardContent className="space-y-4">*/}
+            {/*    <div>*/}
+            {/*      <Label*/}
+            {/*        htmlFor="date-from"*/}
+            {/*        className="text-muted-foreground text-xs"*/}
+            {/*      >*/}
+            {/*        Date Range*/}
+            {/*      </Label>*/}
+            {/*      <DatePicker />*/}
+            {/*    </div>*/}
+            {/*  </CardContent>*/}
+            {/*</Card>*/}
           </div>
         </AccordionContent>
       </AccordionItem>

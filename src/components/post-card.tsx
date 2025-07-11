@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Media, Post } from "../../payload-types";
 import { displayDate } from "~/lib/date";
 import { displayPostType } from "~/lib/post-type";

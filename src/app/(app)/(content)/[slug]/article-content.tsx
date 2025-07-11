@@ -11,13 +11,11 @@ import type {
   SerializedQuoteNode,
   SerializedUploadNode,
   SerializedListNode,
-  SerializedListItemNode,
 } from "@payloadcms/richtext-lexical";
 import Image from "next/image";
 import { type JSX } from "react";
 import Link from "next/link";
 import { cn } from "~/lib/utils";
-import { Checkbox } from "~/components/ui/checkbox";
 
 interface ArticleContentProps {
   post: Post;

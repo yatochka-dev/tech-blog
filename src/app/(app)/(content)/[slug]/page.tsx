@@ -1,4 +1,3 @@
-import payload from "~/data-access";
 import type { Metadata } from "next";
 import seoToMetadata from "~/lib/seo-to-metadata";
 import Article from "./article";

@@ -14,7 +14,6 @@ export const getAppConfig = async (p?: BasePayload) => {
   cacheTag(APP_CONFIG_CACHE_TAG);
 
   const payloadClient = p ?? (await payload());
-  console.log("APP CONFIG");
   const conf = await payloadClient.findGlobal({
     slug: "appconf",
     depth: 5,

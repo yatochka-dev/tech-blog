@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { cn } from "~/lib/utils";
 
 type ArticleCardProps = {
   title: string;
@@ -8,6 +9,7 @@ type ArticleCardProps = {
   alt: string;
   date: string;
   link: string;
+  className?: string;
 };
 
 export default function ArticleCard({
@@ -17,10 +19,11 @@ export default function ArticleCard({
   alt,
   date,
   link,
+  className,
 }: ArticleCardProps) {
   return (
-    <div className="flex flex-col space-y-3">
-      <div className="relative mb-2 h-48">
+    <div className={cn("flex flex-col space-y-3", className)}>
+      <div className="relative mb-2 h-36">
         <Image
           src={image}
           alt={alt}

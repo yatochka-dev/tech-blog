@@ -15,13 +15,13 @@ import {
 
 export const useArticlesLimit = () => {
   return useQueryState<number>("limit", {
-    defaultValue: 10,
+    defaultValue: 25,
     parse: parseAsInteger.parse,
     serialize: parseAsInteger.serialize,
   });
 };
 
-const Header = () => {
+const SearchHeader = () => {
   const [search, setSearch] = useQueryState("q", { defaultValue: "" });
   const [limit, setLimit] = useArticlesLimit();
   return (
@@ -80,15 +80,8 @@ const Header = () => {
           </Select>
         </div>
       </div>
-
-      {/*{query && (*/}
-      {/*  <div className="text-sm text-gray-600">*/}
-      {/*    {totalResults} {totalResults === 1 ? "result" : "results"} found for "*/}
-      {/*    {query}"*/}
-      {/*  </div>*/}
-      {/*)}*/}
     </div>
   );
 };
 
-export default Header;
+export default SearchHeader;

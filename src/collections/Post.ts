@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload";
 import slugify from "slugify";
+import cuid from "cuid";
 import { SeoField } from "~/fields/seo";
 import { APP_CONFIG_CACHE_TAG } from "~/data-access/appconf";
 import { revalidateTag } from "next/cache";
@@ -17,7 +18,7 @@ export const Posts: CollectionConfig = {
 
         const slug = post.slug;
         if (!slug) {
-          return "http://localhost:3000";
+          return env.NEXT_PUBLIC_APP_URL;
         }
         return `${env.NEXT_PUBLIC_APP_URL}/${slug}/preview`;
       },
@@ -58,11 +59,10 @@ export const Posts: CollectionConfig = {
         if (operation === "create") {
           const title: string = data.title as unknown as string;
 
-          // random six chars
-          const suffix = Math.random().toString(36).substring(7);
           // Generate slug from title (lowercase, hyphenated)
-          data.slug =
-            slugify(title, { lower: true, strict: true }) + `-${suffix}`;
+          const baseSlug = slugify(title, { lower: true, strict: true });
+          // Use cuid for a globally unique identifier
+          data.slug = `${baseSlug}-${cuid()}`;
         }
 
         const user = req.user?.id;

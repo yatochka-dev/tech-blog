@@ -15,7 +15,6 @@ export const Media: CollectionConfig = {
       "image/webp",
       "image/x-icon",
       "image/vnd.microsoft.icon",
-      "image/vnd",
     ],
   },
   fields: [
@@ -23,7 +22,7 @@ export const Media: CollectionConfig = {
       name: "alt",
       type: "text",
       required: true,
-      defaultValue: "Image of a green elephant",
+      defaultValue: "", // Alt text should be descriptive of the actual image content
     },
   ],
 };

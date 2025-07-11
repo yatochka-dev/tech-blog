@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getAppConfig } from "~/data-access/appconf";
-import PostCard from "~/components/PostCard";
+import PostCard from "~/components/post-card";
 import type { Media } from "@payload-types";
 
 export default async function Home() {

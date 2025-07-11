@@ -183,6 +183,6 @@ ul {
     @apply bg-background text-foreground;
   }
   input[type="checkbox"][readonly] {
-    @apply rounded-sm border border-input bg-input/30 p-0.5 dark:bg-input/20 mr-2;
+    @apply border-input bg-input/30 dark:bg-input/20 mr-2 rounded-sm border p-0.5;
   }
 }
